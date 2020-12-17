@@ -1,1 +1,1 @@
-# Updated-PROMIX-trial-
+# Updated Phase II PROMIX trial
