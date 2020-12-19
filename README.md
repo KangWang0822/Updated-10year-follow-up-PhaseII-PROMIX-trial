@@ -1,6 +1,4 @@
-#Phase II PROMIX trial
-
-#https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87455
+Phase II PROMIX trial(https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87455)
 
 Prior Publications
 
