@@ -1,4 +1,4 @@
-##Phase II PROMIX trial(https://clinicaltrials.gov/ct2/show/NCT00957125)
+##Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125)
 
 Prior Publications
 
