@@ -13,14 +13,70 @@ sub=sub[,c("patientsID","subtype","ER","PR","grade","Tumorsize","Regional nodes 
 mydata=left_join(mydata,sub,by="patientsID")
 mydata$IHC_subtype="Lum"
 mydata$IHC_subtype[mydata$subtype=="TNBC"]="TNBC"
+table(mydata$`PAM50 subtype_op`)
 
 tumor_purity=as.data.frame(fread("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step1/tumor_purity.csv"))
 samplesID=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/PROMIX/samplesID.csv"))
 tumor_purity=left_join(tumor_purity,samplesID,by="samplesID")
 
 tumor_purity=left_join(tumor_purity,mydata,by="patientsID")
+
+#####################################
+######Intrinsic——subtype############
+###################################
+library('clusterProfiler')
+samplesID=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/PROMIX/samplesID.csv"))
+exp=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/PROMIX/new_exprSet.csv"))
+annot<- bitr(exp$gene, fromType="SYMBOL", toType=c("ENTREZID"), OrgDb="org.Hs.eg.db")
+annot<- annot[!duplicated(annot$SYMBOL),]
+colnames(annot)=c("probe","EntrezGene.ID")
+rownames(annot)=annot$probe
+row.names(exp)=exp[,1]
+exp=exp[,-1]
+exp=as.matrix(t(exp[annot$probe,]))
+exp=scale(exp, center = TRUE, scale = TRUE)
+## load SSP fitted in pam50####
+data(pam50)
+data(pam50.scale) #scale(x, center = TRUE, scale = TRUE)
+data(pam50.robust)
+
+Baseline=exp[samplesID$samplesID[samplesID$tpt=="Baseline"],]
+Baseline=scale(Baseline, center = TRUE, scale = TRUE)
+dim(Baseline)
+pam50_baseline<- intrinsic.cluster.predict(sbt.model=pam50.scale,
+                                          data=Baseline, annot=annot, do.mapping=T,
+                                          do.prediction.strength=FALSE, verbose=TRUE)
+table(pam50_baseline$subtype)
+
+Cycle2=exp[samplesID$samplesID[samplesID$tpt=="Cycle 2"],]
+Cycle2=scale(Cycle2, center = TRUE, scale = TRUE)
+pam50_Cycle2<- intrinsic.cluster.predict(sbt.model=pam50.scale,
+                                           data=Cycle2, annot=annot, do.mapping=T,
+                                           do.prediction.strength=FALSE, verbose=TRUE)
+table(pam50_Cycle2$subtype)
+
+Surgery=exp[samplesID$samplesID[samplesID$tpt=="Surgery"],]
+Surgery=scale(Surgery, center = TRUE, scale = TRUE)
+pam50_Surgery<- intrinsic.cluster.predict(sbt.model=pam50.scale,
+                                           data=Surgery, annot=annot, do.mapping=T,
+                                           do.prediction.strength=FALSE, verbose=TRUE)
+table(pam50_Surgery$subtype)
+
+pam50_baseline=as.data.frame(pam50_baseline$subtype) 
+colnames(pam50_baseline)="PAM50"
+
+pam50_Cycle2=as.data.frame(pam50_Cycle2$subtype) 
+colnames(pam50_Cycle2)="PAM50"
+
+pam50_Surgery=as.data.frame(pam50_Surgery$subtype) 
+colnames(pam50_Surgery)="PAM50"
+
+pam50=rbind(pam50_baseline,pam50_Cycle2,pam50_Surgery)
+pam50$samplesID=rownames(pam50)
+
+tumor_purity=left_join(tumor_purity,pam50,by="samplesID") 
+
 saveRDS(tumor_purity,fil="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step2/tumor_purity.rds")
 #####################################
 ###############Ending################
-#####################################
 #####################################
