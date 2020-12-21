@@ -1,6 +1,6 @@
-##Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125)
+#Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125)
 
-Prior Publications
+##Prior Publications
 
 (1)Assessment of early response biomarkers in relation to long-term survival in patients with HER2-negative breast cancer receiving neoadjuvant chemotherapy plus bevacizumab: Results from the Phase II PROMIX trial. Int J Cancer 2018 Feb 1;142(3):618-628. PMID: 28940389.
 
