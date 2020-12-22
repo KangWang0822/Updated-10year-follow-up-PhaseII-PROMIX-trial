@@ -1,4 +1,4 @@
-Updated 10-year follow-up of PhaseII PROMIX trial
+Dynamic intrinsic and TME response within updated 10-year follow-up of PhaseII PROMIX trial
 ===============
 Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125)
 ---------------
