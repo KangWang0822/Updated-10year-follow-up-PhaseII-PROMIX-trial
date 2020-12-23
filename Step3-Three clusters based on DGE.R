@@ -19,3 +19,6 @@ clu3$cluster=as.factor(clu3$cluster3)
 pheno<- readRDS("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step2/tumor_purity.rds")
 pheno=left_join(pheno,clu3,by="samplesID")
 saveRDS(pheno,fil="tumor_pheno.rds")
+###################################
+###################################
+###################################
