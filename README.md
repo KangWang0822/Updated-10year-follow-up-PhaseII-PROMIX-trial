@@ -1,4 +1,4 @@
-Updating 10-year follow-up of Phase II PROMIX trial: https://clinicaltrials.gov/ct2/show/NCT00957125)
+Updating 10-year follow-up of Phase II PROMIX trial: https://clinicaltrials.gov/ct2/show/NCT00957125.
 ---------------
 Prior Publications from PROMIX trial
 ---------------
