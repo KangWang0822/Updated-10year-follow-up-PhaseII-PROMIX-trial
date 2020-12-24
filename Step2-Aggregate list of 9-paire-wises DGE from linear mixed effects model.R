@@ -29,7 +29,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 opVSbase_total= topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
@@ -46,7 +46,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 opVScycle_total= topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
@@ -63,7 +63,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 cycleVSbase_total = topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
 
 
@@ -103,12 +103,12 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
 clin_1=pheno[pheno$group%in%c("cycle","op"),]
 design<-model.matrix(~0+as.factor(clin_1$group)+as.numeric(clin_1$TumorPurity))
-colnames(design)<-c("baseline","op","purity")
+colnames(design)<-c("cycle","op","purity")
 design
 
 contr.matrix <- makeContrasts(
@@ -119,12 +119,12 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
-##op vs. cycle##
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+##cycle vs. baseline##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
 design<-model.matrix(~0+as.factor(clin_1$group)+as.numeric(clin_1$TumorPurity))
-colnames(design)<-c("baseline","op","purity")
+colnames(design)<-c("baseline","cycle","purity")
 design
 
 contr.matrix <- makeContrasts(
@@ -135,7 +135,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 
 genelist_lum=Reduce(union,list(cycleVSbase=row.names(cycleVSbase), 
                                opVSbase= row.names(opVSbase), 
@@ -156,7 +156,7 @@ pheno$group="baseline"
 pheno$group[pheno$tpt=="Cycle 2"]="cycle"
 pheno$group[pheno$tpt=="Surgery"]="op"
 
-#Lum#
+#TNBC#
 exp=exp[,pheno$samplesID[pheno$IHC_subtype%in%c("TNBC")]]
 pheno=pheno[pheno$IHC_subtype%in%c("TNBC"),]
 ##op vs. baseline##
@@ -174,12 +174,12 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
 clin_1=pheno[pheno$group%in%c("cycle","op"),]
 design<-model.matrix(~0+as.factor(clin_1$group)+as.numeric(clin_1$TumorPurity))
-colnames(design)<-c("baseline","op","purity")
+colnames(design)<-c("cycle","op","purity")
 design
 
 contr.matrix <- makeContrasts(
@@ -190,12 +190,12 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
-##op vs. cycle##
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+##cycle vs. baseline##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
 design<-model.matrix(~0+as.factor(clin_1$group)+as.numeric(clin_1$TumorPurity))
-colnames(design)<-c("baseline","op","purity")
+colnames(design)<-c("baseline","cycle","purity")
 design
 
 contr.matrix <- makeContrasts(
@@ -206,7 +206,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=1,number=50000,sort.by = 'logFC')
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
 
 genelist_TN=Reduce(union,list(cycleVSbase=row.names(cycleVSbase), 
                               opVSbase= row.names(opVSbase), 
