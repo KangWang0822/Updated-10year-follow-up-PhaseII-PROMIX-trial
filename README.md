@@ -1,4 +1,4 @@
-Updating 10-year follow-up of Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125): compendial testing.
+Before updating 10-year follow-up of Phase II PROMIX trial (https://clinicaltrials.gov/ct2/show/NCT00957125): a compendial testing.
 ---------------
 Prior Publications from PROMIX trial
 ---------------
