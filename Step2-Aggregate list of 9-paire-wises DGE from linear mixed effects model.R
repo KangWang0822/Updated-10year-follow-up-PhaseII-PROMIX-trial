@@ -6,6 +6,7 @@ exp=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/P
 row.names(exp)=exp[,1]
 exp=exp[,-1]
 pheno<- readRDS("tumor_purity.rds")
+table(pheno$PAM50,pheno$IHC_subtype)
 pheno$group="baseline"
 pheno$group[pheno$tpt=="Cycle 2"]="cycle"
 pheno$group[pheno$tpt=="Surgery"]="op"
@@ -29,8 +30,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
-opVSbase_total= topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
 clin_1=pheno[pheno$group%in%c("cycle","op"),]
@@ -46,8 +46,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
-opVScycle_total= topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
@@ -63,9 +62,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
-cycleVSbase_total = topTable(efit,adjust.method="BH",genelist=final_genelist,number=50000,sort.by = 'logFC')
-
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 
 genelist=Reduce(union,list(cycleVSbase=row.names(cycleVSbase), 
                       opVSbase= row.names(opVSbase), 
@@ -103,7 +100,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
 clin_1=pheno[pheno$group%in%c("cycle","op"),]
@@ -119,7 +116,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##cycle vs. baseline##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
@@ -135,7 +132,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 
 genelist_lum=Reduce(union,list(cycleVSbase=row.names(cycleVSbase), 
                                opVSbase= row.names(opVSbase), 
@@ -174,7 +171,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+opVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##op vs. cycle##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","op")]]
 clin_1=pheno[pheno$group%in%c("cycle","op"),]
@@ -190,7 +187,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 ##cycle vs. baseline##
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
@@ -206,7 +203,7 @@ contr.matrix
 vfit <- lmFit(mat, design)
 vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
 efit <- eBayes(vfit)
-cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.01,lfc=0.58,number=50000,sort.by = 'logFC')
+cycleVSbase = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=50000,sort.by = 'logFC')
 
 genelist_TN=Reduce(union,list(cycleVSbase=row.names(cycleVSbase), 
                               opVSbase= row.names(opVSbase), 
@@ -359,3 +356,4 @@ plotSA(efit, main="Final model: Mean-variance trend")
 ##############################################
 ##############################################
 ##############################################
+
