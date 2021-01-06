@@ -51,7 +51,7 @@ opVScycle = topTable(efit,adjust.method="BH",coef=1,p.value=0.05,lfc=0.5,number=
 mat=exp[,pheno$samplesID[pheno$group%in%c("cycle","baseline")]]
 clin_1=pheno[pheno$group%in%c("cycle","baseline"),]
 design<-model.matrix(~0+as.factor(clin_1$group)+as.factor(clin_1$IHC_subtype)+as.numeric(clin_1$TumorPurity))
-colnames(design)<-c("baseline","cycle","subtype","purity")
+colnames(design)<-c("cycle","baseline","subtype","purity")
 design
 
 contr.matrix <- makeContrasts(
@@ -356,5 +356,4 @@ plotSA(efit, main="Final model: Mean-variance trend")
 ##############################################
 ##############################################
 ##############################################
-            
 
