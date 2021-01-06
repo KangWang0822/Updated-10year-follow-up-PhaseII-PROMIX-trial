@@ -20,11 +20,11 @@ samplesID=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/data
 tumor_purity=left_join(tumor_purity,samplesID,by="samplesID")
 
 tumor_purity=left_join(tumor_purity,mydata,by="patientsID")
-
+tumor_purity$TumorPurity[(tumor_purity$`pCR or not`=="pCR")&(tumor_purity$tpt=="Surgery")]=0
 #####################################
 ######Intrinsic——subtype############
 ###################################
-library('clusterProfiler')
+library('clusterProfiler');library(genefu)
 samplesID=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/PROMIX/samplesID.csv"))
 exp=as.data.frame(fread("F:/Other projects/1.ribosome/data processing/datasets/PROMIX/new_exprSet.csv"))
 annot<- bitr(exp$gene, fromType="SYMBOL", toType=c("ENTREZID"), OrgDb="org.Hs.eg.db")
@@ -76,8 +76,8 @@ pam50$samplesID=rownames(pam50)
 
 tumor_purity=left_join(tumor_purity,pam50,by="samplesID") 
 
+
 saveRDS(tumor_purity,fil="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step2/tumor_purity.rds")
 #####################################
 ###############Ending################
-#####################################
 #####################################
