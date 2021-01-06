@@ -75,7 +75,8 @@ pam50=rbind(pam50_baseline,pam50_Cycle2,pam50_Surgery)
 pam50$samplesID=rownames(pam50)
 
 tumor_purity=left_join(tumor_purity,pam50,by="samplesID") 
-
+table(tumor_purity$PAM50)
+tumor_purity$PAM50[(tumor_purity$`pCR or not`=="pCR")&(tumor_purity$tpt=="Surgery")]="Normal"
 
 saveRDS(tumor_purity,fil="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step2/tumor_purity.rds")
 #####################################
