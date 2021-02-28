@@ -273,10 +273,59 @@ clusters=as.data.frame(clusters[,c("samplesID","TME_cluster")])
 table(clusters$TME_cluster)
 
 clusters=clusters[,c("samplesID","TME_cluster")]
+####################################################################
+#####################Pathological variables#########################
+########################CD163,FOXP3,cellularity#####################
+####################################################################
+library(readxl);library(tidyverse);library(openxlsx)
+Path=as.data.frame(readxl::read_excel("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Pathological data/FINAL SOS2_promix_tils_CD163_Cellularity_JL.xlsx"))
+FOXP3=as.data.frame(readxl::read_excel("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Pathological data/170719 TIL CD163 FOXP3 biopsier promix 1-129.xlsx",sheet = 3)%>%select("glassseccd","glassnum","FOXP3"))
+Path$glassnum=as.factor(Path$glassnum)
+Path$glassseccd=as.factor(Path$glassseccd)
+FOXP3$glassnum=as.factor(FOXP3$glassnum)
+FOXP3$glassseccd=as.factor(FOXP3$glassseccd)
+FOXP3_a=left_join(Path[Path$glassseccd=="a",],FOXP3[FOXP3$glassseccd=="a",],by="glassnum")%>%select("subjid","tptcd","tpt","TIL","CD163","Cellularity","glassseccd.x","glassnum","FOXP3")
+FOXP3_b=left_join(Path[Path$glassseccd=="b",],FOXP3[FOXP3$glassseccd=="b",],by="glassnum")%>%select("subjid","tptcd","tpt","TIL","CD163","Cellularity","glassseccd.x","glassnum","FOXP3")
+FOXP3_c=left_join(Path[Path$glassseccd=="c",],FOXP3[FOXP3$glassseccd=="c",],by="glassnum")%>%select("subjid","tptcd","tpt","TIL","CD163","Cellularity","glassseccd.x","glassnum","FOXP3")
+FOXP3_d=left_join(Path[Path$glassseccd=="d",],FOXP3[FOXP3$glassseccd=="d",],by="glassnum")%>%select("subjid","tptcd","tpt","TIL","CD163","Cellularity","glassseccd.x","glassnum","FOXP3")
+Path=rbind(FOXP3_a,FOXP3_b,FOXP3_c,FOXP3_d)%>%select("subjid","tpt","TIL","CD163","Cellularity","glassseccd.x","glassnum","FOXP3")
+colnames(Path)=c("patientsID","tpt","TIL","CD163","Cellularity","glassseccd","glassnum","FOXP3")
+write.xlsx(Path,file="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Pathological data/PROMIX_TIL_CD163_FOXP3.xlsx")
+
+
 ###################################################################
 #########################Metabolic subtype#########################
 ###################################################################
-library(clusterProfiler);library(readr);library(data.table);library(enrichplot);library(reshape2);library(tidyverse)
+##Step1 deconvolution TC and TAC#######
+#######################################
+setwd("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Metabolism_cluster")
+library(ISOpureR);library(clusterProfiler);library(readr);library(data.table);library(enrichplot);library(reshape2);library(tidyverse)
+gmt=read.gmt("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Metabolism_cluster/metabolite.gmt")
+uni_gene=unique(gmt$gene)
+load("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/promix_non_normal.Rdata")
+exp=new_exprSet
+exp$gene=row.names(exp)
+genelist=Reduce(intersect,list(exp$gene,uni_gene))
+exp=exp[genelist,]
+exp=exp[order(exp$gene),]
+exp=exp[-1783,-276]
+pheno=readRDS("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step3/tumor_pheno.rds")
+normal=exp[,pheno$samplesID[pheno$tpt=="Surgery"&pheno$`pCR or not`=="pCR"]]
+tumor=exp[,!(colnames(exp)%in%colnames(normal))]
+min(normal)
+set.seed(123);
+ISOpureS1model=ISOpure.step1.CPE(as.matrix(tumor),as.matrix(normal))
+ISOpureS1model$alphapurities
+saveRDS(ISOpureS1model,file="ISOpureS1model.rds")
+# For reproducible results, set the random seed
+set.seed(456);
+# Run ISOpureR Step 2 - Patient Profile Estimation
+ISOpureS2model=ISOpure.step2.PPE(as.matrix(tumor),as.matrix(normal),ISOpureS1model)
+ISOpureS2model$cc_cancerprofiles
+saveRDS(ISOpureS2model,file="ISOpureS2model.rds")
+
+
+
 setwd("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Metabolism_cluster")
 #####output FDR#####
 gmt=read.gmt("F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step6/Metabolism_cluster/metabolite.gmt")
@@ -359,4 +408,6 @@ row.names(mydata)=mydata$samplesID
 finaldata=left_join(mydata,clusters,by="samplesID")%>%left_join(Metabolite_group,by="samplesID")
 saveRDS(finaldata,file="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/Figure2/pheno_TME_MET.rds")
 saveRDS(finaldata,file="F:/Ph.D projects/1.PROMIX_10y_followup/dataprocessing/step7/pheno_TME_MET.rds")
+
+
 
